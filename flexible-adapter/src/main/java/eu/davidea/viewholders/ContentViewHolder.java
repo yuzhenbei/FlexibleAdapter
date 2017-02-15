@@ -18,6 +18,7 @@ package eu.davidea.viewholders;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -72,6 +73,21 @@ abstract class ContentViewHolder extends RecyclerView.ViewHolder {
 	 */
 	public final View getContentView() {
 		return contentView != null ? contentView : itemView;
+	}
+
+	/**
+	 * Allows to customize with inner View of this ViewHolder will be sticky.
+	 * <p>By Default the whole container will be the View to stick on the Top.</p>
+	 *
+	 * @return the view that will be translated to be sticky
+	 * @since 5.0.0-rc2
+	 */
+	public View getStickyView() {
+		return getContentView();
+	}
+
+	public ViewGroup getStickyViewContainer() {
+		return (ViewGroup) itemView;
 	}
 
 	/**

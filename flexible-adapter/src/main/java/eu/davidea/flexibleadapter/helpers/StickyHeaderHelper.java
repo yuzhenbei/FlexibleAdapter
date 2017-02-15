@@ -173,14 +173,14 @@ public final class StickyHeaderHelper extends OnScrollListener {
 
 	private void configureLayoutElevation() {
 		// 1. Take elevation from header item layout (most important)
-		mElevation = ViewCompat.getElevation(mStickyHeaderViewHolder.getContentView());
+		mElevation = ViewCompat.getElevation(mStickyHeaderViewHolder.getStickyView());
 		if (mElevation == 0f) {
 			// 2. Take elevation settings
 			mElevation = mAdapter.getStickyHeaderElevation();
 		}
 		if (mElevation > 0) {
 			// Needed to elevate the view
-			ViewCompat.setBackground(mStickyHolderLayout, mStickyHeaderViewHolder.getContentView().getBackground());
+			ViewCompat.setBackground(mStickyHolderLayout, mStickyHeaderViewHolder.getStickyView().getBackground());
 		}
 	}
 
@@ -240,19 +240,21 @@ public final class StickyHeaderHelper extends OnScrollListener {
 	}
 
 	private void ensureHeaderParent() {
-		final View view = mStickyHeaderViewHolder.getContentView();
-		// #121 - Make sure the measured height (width for horizontal layout) is kept if
-		// WRAP_CONTENT has been set for the Header View
-		mStickyHeaderViewHolder.itemView.getLayoutParams().width = view.getMeasuredWidth();
-		mStickyHeaderViewHolder.itemView.getLayoutParams().height = view.getMeasuredHeight();
-		// Ensure the itemView is hidden to avoid double background
-		mStickyHeaderViewHolder.itemView.setVisibility(View.INVISIBLE);
+		final View view = mStickyHeaderViewHolder.getStickyView();
+		if (mStickyHeaderViewHolder.getStickyView().equals(mStickyHeaderViewHolder.getContentView())) {
+			// #121 - Make sure the measured height (width for horizontal layout) is kept if
+			// WRAP_CONTENT has been set for the Header View
+			mStickyHeaderViewHolder.itemView.getLayoutParams().width = view.getMeasuredWidth();
+			mStickyHeaderViewHolder.itemView.getLayoutParams().height = view.getMeasuredHeight();
+			// Ensure the itemView is hidden to avoid double background
+			mStickyHeaderViewHolder.itemView.setVisibility(View.INVISIBLE);
+		}
 		// #139 - Copy xml params instead of Measured params
 		ViewGroup.LayoutParams params = mStickyHolderLayout.getLayoutParams();
 		params.width = view.getLayoutParams().width;
 		params.height = view.getLayoutParams().height;
 		removeViewFromParent(view);
-		mStickyHolderLayout.addView(view);
+		((ViewGroup)(mStickyHolderLayout.getChildAt(0))).addView(view);
 		configureLayoutElevation();
 	}
 
@@ -276,13 +278,13 @@ public final class StickyHeaderHelper extends OnScrollListener {
 	private void resetHeader(FlexibleViewHolder header) {
 		restoreHeaderItemVisibility();
 		// Clean the header container
-		final View view = header.getContentView();
+		final View view = header.getStickyView();
 		removeViewFromParent(view);
 		// Reset translation on removed header
 		view.setTranslationX(0);
 		view.setTranslationY(0);
 		if (!header.itemView.equals(view))
-			((ViewGroup) header.itemView).addView(view);
+			header.getStickyViewContainer().addView(view);
 		header.setIsRecyclable(true);
 	}
 
@@ -386,7 +388,7 @@ public final class StickyHeaderHelper extends OnScrollListener {
 			}
 
 			// Measure and Layout the stickyView
-			final View headerView = holder.getContentView();
+			final View headerView = holder.getStickyView();
 			int childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
 					mRecyclerView.getPaddingLeft() + mRecyclerView.getPaddingRight(),
 					headerView.getLayoutParams().width);

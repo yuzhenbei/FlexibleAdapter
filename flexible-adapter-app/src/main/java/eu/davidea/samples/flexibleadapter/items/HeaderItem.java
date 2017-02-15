@@ -14,6 +14,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractHeaderItem;
 import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.ISectionable;
+import eu.davidea.flipview.FlipView;
 import eu.davidea.samples.flexibleadapter.R;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
@@ -94,6 +95,7 @@ public class HeaderItem extends AbstractHeaderItem<HeaderItem.HeaderViewHolder> 
 			Log.d(this.getClass().getSimpleName(), "HeaderItem " + id + " Payload " + payloads);
 		} else {
 			holder.mTitle.setText(getTitle());
+			holder.mFlipView.setFrontText(getId());
 		}
 		List<ISectionable> sectionableList = adapter.getSectionItems(this);
 		String subTitle = (sectionableList.isEmpty() ? "Empty section" :
@@ -111,9 +113,13 @@ public class HeaderItem extends AbstractHeaderItem<HeaderItem.HeaderViewHolder> 
 		TextView mTitle;
 		TextView mSubtitle;
 		ImageView mHandleView;
+		FlipView mFlipView;
+		ViewGroup mStickyContainer;
 
 		HeaderViewHolder(View view, FlexibleAdapter adapter) {
 			super(view, adapter, true);//True for sticky
+			mFlipView = (FlipView) view.findViewById(R.id.image);
+			mStickyContainer = (ViewGroup) view.findViewById(R.id.image_util_container);
 			mTitle = (TextView) view.findViewById(R.id.title);
 			mSubtitle = (TextView) view.findViewById(R.id.subtitle);
 			mTitle.setOnClickListener(new View.OnClickListener() {
@@ -122,18 +128,28 @@ public class HeaderItem extends AbstractHeaderItem<HeaderItem.HeaderViewHolder> 
 					Log.d("HeaderTitle", "Registered internal click on Header TitleTextView! " + mTitle.getText() + " position=" + getFlexibleAdapterPosition());
 				}
 			});
-			this.mHandleView = (ImageView) view.findViewById(R.id.row_handle);
+			mHandleView = (ImageView) view.findViewById(R.id.row_handle);
 			if (adapter.isHandleDragEnabled()) {
-				this.mHandleView.setVisibility(View.VISIBLE);
+				mHandleView.setVisibility(View.VISIBLE);
 				setDragHandleView(mHandleView);
 			} else {
-				this.mHandleView.setVisibility(View.GONE);
+				mHandleView.setVisibility(View.GONE);
 			}
 
 			//Support for StaggeredGridLayoutManager
 			if (itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
 				((StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams()).setFullSpan(true);
 			}
+		}
+
+		@Override
+		public View getStickyView() {
+			return mFlipView;
+		}
+
+		@Override
+		public ViewGroup getStickyViewContainer() {
+			return mStickyContainer;
 		}
 	}
 

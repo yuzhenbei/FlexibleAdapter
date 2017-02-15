@@ -6,6 +6,30 @@
 	android:background="#aa7e57c2"
 	android:elevation="5dp">
 
+	<FrameLayout
+		android:id="@+id/image_util_container"
+		android:layout_width="@dimen/icon_width"
+		android:layout_height="@dimen/icon_height"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:layout_centerInParent="true"
+		android:layout_marginLeft="@dimen/margin_left"
+		android:layout_marginStart="@dimen/margin_left">
+
+		<eu.davidea.flipview.FlipView
+			android:id="@+id/image"
+			xmlns:app="http://schemas.android.com/apk/res-auto"
+			android:layout_width="@dimen/icon_width"
+			android:layout_height="@dimen/icon_height"
+			android:padding="2dp"
+			app:animationDuration="170"
+			app:checked="false"
+			app:enableInitialAnimation="true"
+			app:frontLayout="@layout/flipview_front_custom_text"
+			app:rearLayout="@layout/flipview_rear_custom"/>
+
+	</FrameLayout>
+
 	<LinearLayout
 		android:id="@+id/title_container"
 		android:layout_width="match_parent"
@@ -14,6 +38,7 @@
 		android:layout_marginStart="@dimen/margin_left"
 		android:layout_marginRight="@dimen/margin_right"
 		android:layout_marginEnd="@dimen/margin_right"
+		android:layout_toRightOf="@id/image_util_container"
 		android:layout_centerInParent="true"
 		android:orientation="vertical">
 

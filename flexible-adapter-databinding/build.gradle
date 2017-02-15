@@ -4,7 +4,7 @@ ext {
 	// Library Settings
 	libraryName = "FlexibleAdapter DataBinding extension"
 	libraryCode = 1
-	libraryVersion = "1.0.0-b1"
+	libraryVersion = "1.0.0-SNAPSHOT"
 	libraryDescription = "DataBinding extension for FlexibleAdapter project"
 	libraryLabels = ['android', 'flexibleadapter', 'adapter', 'databinding', 'binding']
 
@@ -41,5 +41,5 @@ dependencies {
 
 if (project.hasProperty('all') || project.hasProperty('databinding')) {
 	apply from: '../maven-install.gradle'
-	apply from: '../jfrog-bintray-publish.gradle'
+	//apply from: '../jfrog-bintray-publish.gradle'
 }

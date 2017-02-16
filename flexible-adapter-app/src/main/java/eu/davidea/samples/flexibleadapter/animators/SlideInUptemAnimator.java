@@ -21,13 +21,13 @@ import android.view.animation.Interpolator;
 
 import eu.davidea.flexibleadapter.common.FlexibleItemAnimator;
 
-public class SlideInUpItemAnimator extends FlexibleItemAnimator {
+public class SlideInUptemAnimator extends FlexibleItemAnimator {
 
-	public SlideInUpItemAnimator() {
+	public SlideInUptemAnimator() {
 
 	}
 
-	public SlideInUpItemAnimator(Interpolator interpolator) {
+	public SlideInUptemAnimator(Interpolator interpolator) {
 		mInterpolator = interpolator;
 	}
 

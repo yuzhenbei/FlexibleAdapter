@@ -1870,8 +1870,9 @@ public class FlexibleAdapter<T extends IFlexible>
 			// The visibility will be restored when header is reset in StickyHeaderHelper
 			if (areHeadersSticky() && !isFastScroll && mStickyHeaderHelper.getStickyPosition() >= 0 && payloads.isEmpty()) {
 				int headerPos = Utils.findFirstVisibleItemPosition(mRecyclerView.getLayoutManager()) - 1;
-				if (headerPos == position && isHeader(item))
-					holder.itemView.setVisibility(View.INVISIBLE);
+				if (headerPos == position && isHeader(item) && holder instanceof FlexibleViewHolder) {
+					((FlexibleViewHolder) holder).getStickyViewContainer().setVisibility(View.INVISIBLE);
+				}
 			}
 		}
 		// Endless Scroll

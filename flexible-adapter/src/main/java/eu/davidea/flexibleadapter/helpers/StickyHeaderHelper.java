@@ -17,11 +17,9 @@ package eu.davidea.flexibleadapter.helpers;
 
 import android.animation.Animator;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,14 +171,14 @@ public final class StickyHeaderHelper extends OnScrollListener {
 
 	private void configureLayoutElevation() {
 		// 1. Take elevation from header item layout (most important)
-		mElevation = ViewCompat.getElevation(mStickyHeaderViewHolder.getStickyView());
+		mElevation = ViewCompat.getElevation(mStickyHeaderViewHolder.getContentView());
 		if (mElevation == 0f) {
 			// 2. Take elevation settings
 			mElevation = mAdapter.getStickyHeaderElevation();
 		}
 		if (mElevation > 0) {
 			// Needed to elevate the view
-			ViewCompat.setBackground(mStickyHolderLayout, mStickyHeaderViewHolder.getStickyView().getBackground());
+			//ViewCompat.setBackground(mStickyHolderLayout, mStickyHeaderViewHolder.getStickyViewContainer().getBackground());
 		}
 	}
 
@@ -241,20 +239,21 @@ public final class StickyHeaderHelper extends OnScrollListener {
 
 	private void ensureHeaderParent() {
 		final View view = mStickyHeaderViewHolder.getStickyView();
-		if (mStickyHeaderViewHolder.getStickyView().equals(mStickyHeaderViewHolder.getContentView())) {
+		if (view.equals(mStickyHeaderViewHolder.getContentView())) {
 			// #121 - Make sure the measured height (width for horizontal layout) is kept if
 			// WRAP_CONTENT has been set for the Header View
 			mStickyHeaderViewHolder.itemView.getLayoutParams().width = view.getMeasuredWidth();
 			mStickyHeaderViewHolder.itemView.getLayoutParams().height = view.getMeasuredHeight();
 			// Ensure the itemView is hidden to avoid double background
-			mStickyHeaderViewHolder.itemView.setVisibility(View.INVISIBLE);
+			mStickyHeaderViewHolder.getStickyViewContainer().setVisibility(View.INVISIBLE);
 		}
 		// #139 - Copy xml params instead of Measured params
 		ViewGroup.LayoutParams params = mStickyHolderLayout.getLayoutParams();
 		params.width = view.getLayoutParams().width;
 		params.height = view.getLayoutParams().height;
+		view.setVisibility(View.VISIBLE);
 		removeViewFromParent(view);
-		((ViewGroup)(mStickyHolderLayout.getChildAt(0))).addView(view);
+		mStickyHolderLayout.addView(view);
 		configureLayoutElevation();
 	}
 
@@ -283,8 +282,10 @@ public final class StickyHeaderHelper extends OnScrollListener {
 		// Reset translation on removed header
 		view.setTranslationX(0);
 		view.setTranslationY(0);
-		if (!header.itemView.equals(view))
+		if (!header.itemView.equals(view)) {
 			header.getStickyViewContainer().addView(view);
+			header.getStickyViewContainer().setVisibility(View.VISIBLE);
+		}
 		header.setIsRecyclable(true);
 	}
 
@@ -340,11 +341,7 @@ public final class StickyHeaderHelper extends OnScrollListener {
 	private int getStickyPosition(int adapterPosHere) {
 		if (adapterPosHere == RecyclerView.NO_POSITION) {
 			// Fix to display correct sticky header (especially after the searchText is cleared out)
-			if (mRecyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
-				adapterPosHere = ((StaggeredGridLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPositions(null)[0];
-			} else {
-				adapterPosHere = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-			}
+			adapterPosHere = Utils.findFirstVisibleItemPosition(mRecyclerView.getLayoutManager());
 			if (adapterPosHere == 0 && !hasStickyHeaderTranslated(0)) {
 				return RecyclerView.NO_POSITION;
 			}
@@ -377,27 +374,27 @@ public final class StickyHeaderHelper extends OnScrollListener {
 			holder.setBackupPosition(position);
 
 			// Calculate width and height
-			int widthSpec;
-			int heightSpec;
-			if (Utils.getOrientation(mRecyclerView.getLayoutManager()) == OrientationHelper.VERTICAL) {
-				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.EXACTLY);
-				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.UNSPECIFIED);
-			} else {
-				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.EXACTLY);
-			}
-
-			// Measure and Layout the stickyView
-			final View headerView = holder.getStickyView();
-			int childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
-					mRecyclerView.getPaddingLeft() + mRecyclerView.getPaddingRight(),
-					headerView.getLayoutParams().width);
-			int childHeight = ViewGroup.getChildMeasureSpec(heightSpec,
-					mRecyclerView.getPaddingTop() + mRecyclerView.getPaddingBottom(),
-					headerView.getLayoutParams().height);
-
-			headerView.measure(childWidth, childHeight);
-			headerView.layout(0, 0, headerView.getMeasuredWidth(), headerView.getMeasuredHeight());
+//			int widthSpec;
+//			int heightSpec;
+//			if (Utils.getOrientation(mRecyclerView.getLayoutManager()) == OrientationHelper.VERTICAL) {
+//				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.EXACTLY);
+//				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.UNSPECIFIED);
+//			} else {
+//				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+//				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.EXACTLY);
+//			}
+//
+//			// Measure and Layout the stickyView
+//			final View headerView = holder.getContentView();
+//			int childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
+//					mRecyclerView.getPaddingLeft() + mRecyclerView.getPaddingRight(),
+//					headerView.getLayoutParams().width);
+//			int childHeight = ViewGroup.getChildMeasureSpec(heightSpec,
+//					mRecyclerView.getPaddingTop() + mRecyclerView.getPaddingBottom(),
+//					headerView.getLayoutParams().height);
+//
+//			headerView.measure(childWidth, childHeight);
+//			headerView.layout(0, 0, headerView.getMeasuredWidth(), headerView.getMeasuredHeight());
 		}
 		return holder;
 	}

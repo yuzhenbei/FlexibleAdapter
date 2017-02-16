@@ -6,7 +6,7 @@ android {
 	buildToolsVersion buildTools
 
 	defaultConfig {
-		applicationId "eu.davidea.samples.flexibleadapter"
+		applicationId "eu.davidea.examples.flexibleadapter"
 		minSdkVersion minSdk
 		targetSdkVersion targetSdk
 		versionCode libraryCode

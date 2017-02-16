@@ -77,7 +77,7 @@ abstract class ContentViewHolder extends RecyclerView.ViewHolder {
 
 	/**
 	 * Allows to customize with inner View of this ViewHolder will be sticky.
-	 * <p>By Default the whole container will be the View to stick on the Top.</p>
+	 * <p>By Default the whole ContentView is the View to stick.</p>
 	 *
 	 * @return the view that will be translated to be sticky
 	 * @since 5.0.0-rc2

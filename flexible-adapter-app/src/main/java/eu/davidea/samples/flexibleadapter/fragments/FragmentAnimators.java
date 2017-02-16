@@ -36,7 +36,7 @@ import eu.davidea.samples.flexibleadapter.animators.ScaleInItemAnimator;
 import eu.davidea.samples.flexibleadapter.animators.SlideInDownItemAnimator;
 import eu.davidea.samples.flexibleadapter.animators.SlideInLeftItemAnimator;
 import eu.davidea.samples.flexibleadapter.animators.SlideInRightItemAnimator;
-import eu.davidea.samples.flexibleadapter.animators.SlideInUpItemAnimator;
+import eu.davidea.samples.flexibleadapter.animators.SlideInUptemAnimator;
 import eu.davidea.samples.flexibleadapter.items.ScrollableUseCaseItem;
 import eu.davidea.samples.flexibleadapter.services.DatabaseConfiguration;
 import eu.davidea.samples.flexibleadapter.services.DatabaseService;
@@ -246,7 +246,7 @@ public class FragmentAnimators extends AbstractFragment {
 		SlideInLeft(new SlideInLeftItemAnimator(new OvershootInterpolator(1f))),
 		SlideInRight(new SlideInRightItemAnimator(new OvershootInterpolator(1f))),
 		SlideInDown(new SlideInDownItemAnimator(new OvershootInterpolator(1f))),
-		SlideInUp(new SlideInUpItemAnimator(new OvershootInterpolator(1f))),
+		SlideInUp(new SlideInUptemAnimator(new OvershootInterpolator(1f))),
 		OvershootInRight(new OvershootInRightItemAnimator(1f)),
 		OvershootInLeft(new OvershootInLeftItemAnimator(1f));
 

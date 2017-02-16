@@ -120,8 +120,8 @@ public final class StickyHeaderHelper extends OnScrollListener {
 	}
 
 	private boolean hasStickyHeaderTranslated(int position) {
-		RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(position);
-		return vh != null && (vh.itemView.getX() < 0 || vh.itemView.getY() < 0);
+		FlexibleViewHolder vh = (FlexibleViewHolder) mRecyclerView.findViewHolderForAdapterPosition(position);
+		return vh != null && (vh.getStickyView().getX() < 0 || vh.getStickyView().getY() < 0);
 	}
 
 	private void onStickyHeaderChange(int sectionIndex) {
@@ -176,9 +176,9 @@ public final class StickyHeaderHelper extends OnScrollListener {
 			// 2. Take elevation settings
 			mElevation = mAdapter.getStickyHeaderElevation();
 		}
-		if (mElevation > 0) {
+		if (mElevation > 0 && mStickyHeaderViewHolder.getStickyView().equals(mStickyHeaderViewHolder.getContentView())) {
 			// Needed to elevate the view
-			//ViewCompat.setBackground(mStickyHolderLayout, mStickyHeaderViewHolder.getStickyViewContainer().getBackground());
+			ViewCompat.setBackground(mStickyHolderLayout, mStickyHeaderViewHolder.getStickyViewContainer().getBackground());
 		}
 	}
 
@@ -249,8 +249,8 @@ public final class StickyHeaderHelper extends OnScrollListener {
 		}
 		// #139 - Copy xml params instead of Measured params
 		ViewGroup.LayoutParams params = mStickyHolderLayout.getLayoutParams();
-		params.width = view.getLayoutParams().width;
-		params.height = view.getLayoutParams().height;
+		params.width = mStickyHeaderViewHolder.getStickyViewContainer().getLayoutParams().width;
+		params.height = mStickyHeaderViewHolder.getStickyViewContainer().getLayoutParams().height;
 		view.setVisibility(View.VISIBLE);
 		removeViewFromParent(view);
 		mStickyHolderLayout.addView(view);
@@ -374,27 +374,27 @@ public final class StickyHeaderHelper extends OnScrollListener {
 			holder.setBackupPosition(position);
 
 			// Calculate width and height
-//			int widthSpec;
-//			int heightSpec;
-//			if (Utils.getOrientation(mRecyclerView.getLayoutManager()) == OrientationHelper.VERTICAL) {
-//				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.EXACTLY);
-//				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.UNSPECIFIED);
-//			} else {
-//				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-//				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.EXACTLY);
-//			}
-//
-//			// Measure and Layout the stickyView
-//			final View headerView = holder.getContentView();
-//			int childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
-//					mRecyclerView.getPaddingLeft() + mRecyclerView.getPaddingRight(),
-//					headerView.getLayoutParams().width);
-//			int childHeight = ViewGroup.getChildMeasureSpec(heightSpec,
-//					mRecyclerView.getPaddingTop() + mRecyclerView.getPaddingBottom(),
-//					headerView.getLayoutParams().height);
-//
-//			headerView.measure(childWidth, childHeight);
-//			headerView.layout(0, 0, headerView.getMeasuredWidth(), headerView.getMeasuredHeight());
+			int widthSpec;
+			int heightSpec;
+			if (Utils.getOrientation(mRecyclerView.getLayoutManager()) == OrientationHelper.VERTICAL) {
+				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.EXACTLY);
+				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.UNSPECIFIED);
+			} else {
+				widthSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+				heightSpec = View.MeasureSpec.makeMeasureSpec(mRecyclerView.getHeight(), View.MeasureSpec.EXACTLY);
+			}
+
+			// Measure and Layout the stickyView
+			final View headerView = holder.getContentView();
+			int childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
+					mRecyclerView.getPaddingLeft() + mRecyclerView.getPaddingRight(),
+					headerView.getLayoutParams().width);
+			int childHeight = ViewGroup.getChildMeasureSpec(heightSpec,
+					mRecyclerView.getPaddingTop() + mRecyclerView.getPaddingBottom(),
+					headerView.getLayoutParams().height);
+
+			headerView.measure(childWidth, childHeight);
+			headerView.layout(0, 0, headerView.getMeasuredWidth(), headerView.getMeasuredHeight());
 		}
 		return holder;
 	}

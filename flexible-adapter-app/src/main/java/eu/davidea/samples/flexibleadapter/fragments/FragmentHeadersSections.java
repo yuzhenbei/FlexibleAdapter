@@ -24,7 +24,6 @@ import eu.davidea.samples.flexibleadapter.R;
 import eu.davidea.samples.flexibleadapter.dialogs.BottomSheetDialog;
 import eu.davidea.samples.flexibleadapter.dialogs.OnParameterSelectedListener;
 import eu.davidea.samples.flexibleadapter.items.ExpandableHeaderItem;
-import eu.davidea.samples.flexibleadapter.items.ScrollableUseCaseItem;
 import eu.davidea.samples.flexibleadapter.services.DatabaseConfiguration;
 import eu.davidea.samples.flexibleadapter.services.DatabaseService;
 import eu.davidea.utils.Utils;
@@ -113,11 +112,11 @@ public class FragmentHeadersSections extends AbstractFragment
 		mListener.onFragmentChange(swipeRefreshLayout, mRecyclerView, SelectableAdapter.MODE_IDLE);
 
 		// Add 3 Scrollable Headers and 1 Footer
-		mAdapter.addUserLearnedSelection(savedInstanceState == null);
-		mAdapter.addScrollableHeaderWithDelay(new ScrollableUseCaseItem(
-				getString(R.string.headers_sections_use_case_title),
-				getString(R.string.headers_sections_use_case_description)), 900L, false);
-		mAdapter.showLayoutInfo(savedInstanceState == null);
+//		mAdapter.addUserLearnedSelection(savedInstanceState == null);
+//		mAdapter.addScrollableHeaderWithDelay(new ScrollableUseCaseItem(
+//				getString(R.string.headers_sections_use_case_title),
+//				getString(R.string.headers_sections_use_case_description)), 900L, false);
+//		mAdapter.showLayoutInfo(savedInstanceState == null);
 		mAdapter.addScrollableFooter();
 	}
 

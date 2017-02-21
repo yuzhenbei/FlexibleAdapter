@@ -121,7 +121,7 @@ public final class StickyHeaderHelper extends OnScrollListener {
 
 	private boolean hasStickyHeaderTranslated(int position) {
 		FlexibleViewHolder vh = (FlexibleViewHolder) mRecyclerView.findViewHolderForAdapterPosition(position);
-		return vh != null && (vh.getStickyView().getX() < 0 || vh.getStickyView().getY() < 0);
+		return vh != null && (vh.itemView.getX() < 0 || vh.itemView.getY() < 0);
 	}
 
 	private void onStickyHeaderChange(int sectionIndex) {
@@ -284,6 +284,7 @@ public final class StickyHeaderHelper extends OnScrollListener {
 		view.setTranslationY(0);
 		if (!header.itemView.equals(view)) {
 			header.getStickyViewContainer().addView(view);
+			view.setVisibility(View.VISIBLE);
 			header.getStickyViewContainer().setVisibility(View.VISIBLE);
 		}
 		header.setIsRecyclable(true);

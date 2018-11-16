@@ -1,10 +1,10 @@
 package eu.davidea.samples.flexibleadapter.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +25,6 @@ import eu.davidea.samples.flexibleadapter.ExampleAdapter;
 import eu.davidea.samples.flexibleadapter.MainActivity;
 import eu.davidea.samples.flexibleadapter.R;
 import eu.davidea.samples.flexibleadapter.dialogs.OnParameterSelectedListener;
-import eu.davidea.samples.flexibleadapter.items.HeaderItem;
 import eu.davidea.samples.flexibleadapter.items.ScrollableUseCaseItem;
 import eu.davidea.samples.flexibleadapter.services.DatabaseConfiguration;
 import eu.davidea.samples.flexibleadapter.services.DatabaseService;
@@ -148,12 +147,13 @@ public class FragmentHeadersSections extends AbstractFragment
 
     @Override
     public void performFabAction() {
-        int position = mAdapter.getStickyPosition();
-        HeaderItem header = (HeaderItem) mAdapter.getItem(position);
-        if (header != null) {
-            header.setTitle("New sticky title " + count++);
-            mAdapter.updateItem(header);
-        }
+        mAdapter.updateScrollableFooter();
+//        int position = mAdapter.getStickyPosition();
+//        HeaderItem header = (HeaderItem) mAdapter.getItem(position);
+//        if (header != null) {
+//            header.setTitle("New sticky title " + count++);
+//            mAdapter.updateItem(header);
+//        }
 //		BottomSheetSectionDialog bottomSheetDialogFragment = BottomSheetSectionDialog.newInstance(R.layout.bottom_sheet_headers_sections, this);
 //		bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), BottomSheetSectionDialog.TAG);
     }
